@@ -31,8 +31,6 @@ public class TMDBJsonUtils {
         for (int i = 0; i < movieArray.length(); i++){
             String title, poster, release, rating, overview;
 
-            Movie movie = new Movie();
-
             //Get the JSONObject for each of the 5 variables of the Movie class
             title = movieArray.getJSONObject(i).optString(TMDB_TITLE);
             poster = movieArray.getJSONObject(i).optString(TMDB_POSTER_PATH);
@@ -41,13 +39,8 @@ public class TMDBJsonUtils {
             overview = movieArray.getJSONObject(i).optString(TMDB_OVERVIEW);
 
             //Append the 5 variables from the getters to the Movie []
-            movie.setTitle(title);
-            movie.setPoster(TMDB_BASE_URL + TMDB_POSTER_SIZE + poster);
-            movie.setRelease(release);
-            movie.setRating(rating);
-            movie.setOverview(overview);
 
-            movieResults[i] = movie;
+            movieResults[i] = new Movie(title, TMDB_BASE_URL.concat(TMDB_POSTER_SIZE).concat(poster), release, rating, overview);
         }
 
         return movieResults;
