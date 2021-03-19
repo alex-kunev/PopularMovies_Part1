@@ -9,29 +9,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMovieListener {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     private RecyclerView movieListRecyclerView;
     private MovieAdapter mMovieAdapter;
-    private RecyclerView.LayoutManager layoutManager;
     private Movie [] movieData;
 
-    String query = "popular";
-
+    private String query = "popular";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        movieListRecyclerView = (RecyclerView) findViewById(R.id.lv_moviesList);
+        movieListRecyclerView = findViewById(R.id.lv_moviesList);
 
-//        LinearLayoutManager LayoutManager = new LinearLayoutManager(this);
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 5);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         movieListRecyclerView.setLayoutManager(layoutManager);
 
         movieListRecyclerView.setHasFixedSize(true);
@@ -63,9 +63,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
     }
 
     private void loadMovieData() {
-        String theMovieDbQueryType = query;
-        movieListRecyclerView.setVisibility(View.VISIBLE);
-        new FetchMovieTask().execute(theMovieDbQueryType);
+        movieListRecyclerView.setVisibility(View.INVISIBLE);
+        new FetchMovieTask().execute(query);
     }
 
     public class FetchMovieTask extends AsyncTask<String, Void, Movie[]> {
@@ -80,14 +79,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
                 return null;
             }
 
-            String sortBy = params[0];
-            URL movieRequestUrl = NetworkUtils.buildUrl(sortBy);
+            URL movieRequestUrl = NetworkUtils.buildUrl(params[0]);
 
             try {
                 String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(movieRequestUrl);
 
-                movieData
-                        = TMDBJsonUtils.getMovieInformationsFromJson(MainActivity.this, jsonMovieResponse);
+                movieData = TMDBJsonUtils.getMovieInformationsFromJson(MainActivity.this, jsonMovieResponse);
 
                 return movieData;
 
@@ -100,11 +97,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
         @Override
         protected void onPostExecute(Movie[] movieData) {
             if (movieData != null) {
-                movieListRecyclerView.setVisibility(View.INVISIBLE);
-                mMovieAdapter = new MovieAdapter(movieData,MainActivity.this);
-                movieListRecyclerView.setAdapter(mMovieAdapter);
+                movieListRecyclerView.setVisibility(View.VISIBLE);
+                MainActivity.this.movieData = movieData;
+                mMovieAdapter.setmMovieData(MainActivity.this.movieData);
             } else {
-                System.out.println("There has been an error");
+                Log.d(TAG, "There has been an error");
             }
         }
 

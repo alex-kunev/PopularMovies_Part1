@@ -9,7 +9,7 @@ import org.json.JSONObject;
 //Utility functions to handle TheMovieDataBase (https://www.themoviedb.org) JSON data
 public class TMDBJsonUtils {
 
-    public static Movie[] getMovieInformationsFromJson(Context context, String json) throws JSONException {
+    public static Movie[] getInfoFromJson(Context context, String json) throws JSONException {
 
         final String TMDB_BASE_URL = "https://image.tmdb.org/t/p/";
         final String TMDB_POSTER_SIZE = "w500";
