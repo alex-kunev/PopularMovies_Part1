@@ -19,9 +19,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
         this.mOnMovieListener = onMovieListener;
     }
 
+    public void setmMovieData(Movie[] mMovieData) {
+        this.mMovieData = mMovieData;
+        notifyDataSetChanged();
+    }
+
     public interface OnMovieListener {
         void onClick(int position);
-
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -61,7 +65,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
 
     @Override
     public int getItemCount() {
-        if (null == mMovieData) {
+        if (mMovieData == null) {
             return 0;
         }
         return mMovieData.length;

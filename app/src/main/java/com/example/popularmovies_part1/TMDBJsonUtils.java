@@ -40,14 +40,8 @@ public class TMDBJsonUtils {
             rating = movieArray.getJSONObject(i).optString(TMDB_VOTE);
             overview = movieArray.getJSONObject(i).optString(TMDB_OVERVIEW);
 
-            //Append the 5 variables from the getters to the Movie []
-            movie.setTitle(title);
-            movie.setPoster(TMDB_BASE_URL + TMDB_POSTER_SIZE + poster);
-            movie.setRelease(release);
-            movie.setRating(rating);
-            movie.setOverview(overview);
+            movieResults[i] = new Movie(title, TMDB_BASE_URL.concat(TMDB_POSTER_SIZE).concat(poster), release, rating, overview);
 
-            movieResults[i] = movie;
         }
 
         return movieResults;

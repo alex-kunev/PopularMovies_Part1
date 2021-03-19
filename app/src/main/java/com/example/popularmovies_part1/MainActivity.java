@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import java.net.URL;
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        movieListRecyclerView = findViewById(R.id.lv_moviesList);
+        movieListRecyclerView = findViewById(R.id.rv_moviesList);
 
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         movieListRecyclerView.setLayoutManager(layoutManager);
@@ -44,6 +46,34 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
 
     }
 
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int menuItemSelected = item.getItemId();
+
+        if (menuItemSelected == R.id.highest_rated) {
+            query = "top_rated";
+            loadMovieData();
+            return true;
+        }
+
+        if (menuItemSelected == R.id.most_popular) {
+            query = "popular";
+            loadMovieData();
+            return true;
+        }
+
+        if(menuItemSelected == R.id.about){
+            Intent startAboutActivity = new Intent(this, AboutActivity.class);
+            startActivity(startAboutActivity);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onClick(int position) {
@@ -84,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
             try {
                 String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(movieRequestUrl);
 
-                movieData = TMDBJsonUtils.getMovieInformationsFromJson(MainActivity.this, jsonMovieResponse);
+                movieData = TMDBJsonUtils.getInfoFromJson(MainActivity.this, jsonMovieResponse);
 
                 return movieData;
 

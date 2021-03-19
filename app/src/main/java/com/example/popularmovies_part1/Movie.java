@@ -1,7 +1,11 @@
 package com.example.popularmovies_part1;
 
 public class Movie {
-    private String title, poster, release, rating, overview;
+    private String title;
+    private String poster;
+    private String release;
+    private String rating;
+    private String overview;
 
     public Movie(String title, String poster, String release, String rating, String overview){
         this.title = title;
